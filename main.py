@@ -19,3 +19,11 @@ print(f"Target shape: {y.shape}")
 
 # verify target conversion
 print(f"\nTarget value counts:\n{y.value_counts()}")
+
+# split into train and test
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+print(f"\nTraining shapes: {X_train.shape}, {y_train.shape}")
+print(f"Testing shapes: {X_test.shape}, {y_test.shape}")
