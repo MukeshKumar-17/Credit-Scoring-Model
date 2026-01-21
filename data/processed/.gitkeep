@@ -1,0 +1,2 @@
+# This file keeps the 'processed' folder in git even when it's empty.
+# Cleaned and transformed data will be saved here.
