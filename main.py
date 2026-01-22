@@ -55,6 +55,9 @@ print("LOGISTIC REGRESSION RESULTS")
 print("="*30)
 print(f"Model Accuracy: {accuracy:.2f} ({accuracy*100:.1f}%)")
 
+# Note: Accuracy isn't everything! predicting "Good" for everyone gives 70% accuracy.
+# We care more about catching the "Bad" credits (Recall for class 1).
+
 # detailed evaluation
 from sklearn.metrics import confusion_matrix, classification_report
 
