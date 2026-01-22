@@ -50,15 +50,18 @@ from sklearn.metrics import accuracy_score
 y_pred = model.predict(X_test_scaled)
 accuracy = accuracy_score(y_test, y_pred)
 
-print(f"\nModel Accuracy: {accuracy:.2f} ({accuracy*100:.1f}%)")
+print("\n" + "="*30)
+print("LOGISTIC REGRESSION RESULTS")
+print("="*30)
+print(f"Model Accuracy: {accuracy:.2f} ({accuracy*100:.1f}%)")
 
 # detailed evaluation
 from sklearn.metrics import confusion_matrix, classification_report
 
-print("\nConfusion Matrix:")
+print("\n--- Confusion Matrix ---")
 print(confusion_matrix(y_test, y_pred))
 
-print("\nClassification Report:")
+print("\n--- Classification Report ---")
 print(classification_report(y_test, y_pred))
 
 # --- Feature Importance ---
@@ -100,13 +103,26 @@ rf_acc = accuracy_score(y_test, rf_pred)
 print(f"Logistic Regression Accuracy: {accuracy:.4f}")
 print(f"Random Forest Accuracy:     {rf_acc:.4f}")
 
+# Check prediction counts (0=Good, 1=Bad)
+print("\n--- Prediction Counts ---")
+print("Logistic Regression:")
+print(pd.Series(y_pred).value_counts())
+print("\nRandom Forest:")
+print(pd.Series(rf_pred).value_counts())
+
 # --- Final Decision ---
-print("\n--- Model Selection ---")
+print("\n" + "="*30)
+print("FINAL MVP SELECTION")
+print("="*30)
+
+# Comparing models helps us choose the best tool for the job.
+# For an MVP, we balance accuracy with simplicity.
+
 if rf_acc > accuracy:
     print("🏆 Random Forest is selected for the MVP!")
-    print("Reason: Better accuracy.")
+    print(f"Reason: It has higher accuracy ({rf_acc:.2%}) and handles complex data patterns.")
     print("Note: In real credit scoring, we might still prefer Logistic Regression for explainability.")
 else:
     print("🏆 Logistic Regression is selected for the MVP!")
-    print("Reason: Simpler, easier to explain, and performs just as well here.")
+    print(f"Reason: It performs similarly ({accuracy:.2%}) and is much easier to explain.")
     print("Note: In finance, being able to explain 'WHY' a loan was rejected is critical.")
