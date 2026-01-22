@@ -28,18 +28,25 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 print(f"\nTraining shapes: {X_train.shape}, {y_train.shape}")
 print(f"Testing shapes: {X_test.shape}, {y_test.shape}")
 
+# standard scaling (mean=0, std=1)
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)  # use same scaler!
+
 # train model
 from sklearn.linear_model import LogisticRegression
 
 model = LogisticRegression(max_iter=1000)
-model.fit(X_train, y_train)
+model.fit(X_train_scaled, y_train)
 
 print("\nModel trained successfully!")
 
 # evaluate model
 from sklearn.metrics import accuracy_score
 
-y_pred = model.predict(X_test)
+y_pred = model.predict(X_test_scaled)
 accuracy = accuracy_score(y_test, y_pred)
 
 print(f"\nModel Accuracy: {accuracy:.2f} ({accuracy*100:.1f}%)")
