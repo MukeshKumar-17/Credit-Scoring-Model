@@ -45,7 +45,7 @@ model.fit(X_train_scaled, y_train)
 print("\nModel trained successfully!")
 
 # evaluate model
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, recall_score
 
 y_pred = model.predict(X_test_scaled)
 accuracy = accuracy_score(y_test, y_pred)
@@ -57,6 +57,18 @@ print(f"Model Accuracy: {accuracy:.2f} ({accuracy*100:.1f}%)")
 
 # Note: Accuracy isn't everything! predicting "Good" for everyone gives 70% accuracy.
 # We care more about catching the "Bad" credits (Recall for class 1).
+
+# --- Business Value: Recall ---
+# In credit risk, a False Negative (missing a bad payer) is costly.
+# We must measure how many bad credits we successfully caught.
+recall = recall_score(y_test, y_pred, pos_label=1)
+
+print("\n--- Business Value: Recall ---")
+print(f"Recall (Bad Credit): {recall:.2f} ({recall*100:.1f}%)")
+print(f"Interpretation: We caught {recall*100:.1f}% of the actual risky customers.")
+if recall < 0.5:
+    print("Warning: We are missing more than half of the risky customers!")
+
 
 # detailed evaluation
 from sklearn.metrics import confusion_matrix, classification_report
