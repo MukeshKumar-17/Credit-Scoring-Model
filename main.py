@@ -79,6 +79,24 @@ print(confusion_matrix(y_test, y_pred))
 print("\n--- Classification Report ---")
 print(classification_report(y_test, y_pred))
 
+# --- Misclassification Analysis ---
+# Breaking down the confusion matrix to understand errors
+cm = confusion_matrix(y_test, y_pred)
+tn, fp, fn, tp = cm.ravel()
+
+print("\n--- Misclassification Analysis ---")
+print(f"True Negatives (Good predicted as Good):  {tn}")
+print(f"True Positives (Bad predicted as Bad):    {tp}")
+print(f"False Positives (Good predicted as Bad):  {fp}")
+print(f"False Negatives (Bad predicted as Good):  {fn}")
+
+# Business interpretation
+print("\n--- Business Impact ---")
+print(f"False Negatives ({fn}): These are BAD customers we MISSED.")
+print("   -> They got loans and will likely default. This is costly!")
+print(f"False Positives ({fp}): These are GOOD customers we rejected.")
+print("   -> We lost potential business, but no direct financial loss.")
+
 # --- Feature Importance ---
 import pandas as pd
 
