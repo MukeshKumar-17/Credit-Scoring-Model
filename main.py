@@ -97,6 +97,18 @@ print("   -> They got loans and will likely default. This is costly!")
 print(f"False Positives ({fp}): These are GOOD customers we rejected.")
 print("   -> We lost potential business, but no direct financial loss.")
 
+# --- Risk Cost Analysis ---
+# Example: It costs 5x more to have a Default (FN) than to miss a customer (FP)
+cost_fn = 5  # Cost of letting a bad entity in
+cost_fp = 1  # Cost of keeping a good entity out
+
+total_cost = (fn * cost_fn) + (fp * cost_fp)
+
+print("\n--- Risk Cost Analysis ---")
+print(f"Assumption: False Negative cost = {cost_fn}, False Positive cost = {cost_fp}")
+print(f"Total Risk Cost: {total_cost}")
+print("Goal: Minimize this cost, not just maximize accuracy.")
+
 # --- Feature Importance ---
 import pandas as pd
 
