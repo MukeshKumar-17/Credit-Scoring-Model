@@ -50,9 +50,9 @@ from sklearn.metrics import accuracy_score, recall_score
 y_pred = model.predict(X_test_scaled)
 accuracy = accuracy_score(y_test, y_pred)
 
-print("\n" + "="*30)
-print("LOGISTIC REGRESSION RESULTS")
-print("="*30)
+print("\n" + "="*50)
+print("SECTION 1: LOGISTIC REGRESSION PERFORMANCE")
+print("="*50)
 print(f"Model Accuracy: {accuracy:.2f} ({accuracy*100:.1f}%)")
 
 # Note: Accuracy isn't everything! predicting "Good" for everyone gives 70% accuracy.
@@ -63,7 +63,9 @@ print(f"Model Accuracy: {accuracy:.2f} ({accuracy*100:.1f}%)")
 # We must measure how many bad credits we successfully caught.
 recall = recall_score(y_test, y_pred, pos_label=1)
 
-print("\n--- Business Value: Recall ---")
+print("\n" + "-"*30)
+print("Metric: Recall (Business Priority)")
+print("-"*30)
 print(f"Recall (Bad Credit): {recall:.2f} ({recall*100:.1f}%)")
 print(f"Interpretation: We caught {recall*100:.1f}% of the actual risky customers.")
 if recall < 0.5:
@@ -84,7 +86,9 @@ print(classification_report(y_test, y_pred))
 cm = confusion_matrix(y_test, y_pred)
 tn, fp, fn, tp = cm.ravel()
 
-print("\n--- Misclassification Analysis ---")
+print("\n" + "-"*30)
+print("Metric: Misclassification Breakdown")
+print("-"*30)
 print(f"True Negatives (Good predicted as Good):  {tn}")
 print(f"True Positives (Bad predicted as Bad):    {tp}")
 print(f"False Positives (Good predicted as Bad):  {fp}")
@@ -104,7 +108,9 @@ cost_fp = 1  # Cost of keeping a good entity out
 
 total_cost = (fn * cost_fn) + (fp * cost_fp)
 
-print("\n--- Risk Cost Analysis ---")
+print("\n" + "="*50)
+print("SECTION 2: BUSINESS RISK ANALYSIS")
+print("="*50)
 print(f"Assumption: False Negative cost = {cost_fn}, False Positive cost = {cost_fp}")
 print(f"Total Risk Cost: {total_cost}")
 print("Goal: Minimize this cost, not just maximize accuracy.")
@@ -125,7 +131,9 @@ feature_importance = pd.DataFrame({
 # Sort by importance
 feature_importance = feature_importance.sort_values(by='Weight', ascending=False)
 
-print("\n--- Feature Importance ---")
+print("\n" + "="*50)
+print("SECTION 3: MODEL INTERPRETABILITY")
+print("="*50)
 print("Top 5 Risk Factors (Bad Credit):")
 print(feature_importance.head(5))
 
@@ -135,7 +143,9 @@ print(feature_importance.tail(5))
 # --- Model Comparison ---
 from sklearn.ensemble import RandomForestClassifier
 
-print("\n--- Model Comparison ---")
+print("\n" + "="*50)
+print("SECTION 4: MODEL COMPARISON")
+print("="*50)
 
 # Train Random Forest
 rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -156,12 +166,18 @@ print("\nRandom Forest:")
 print(pd.Series(rf_pred).value_counts())
 
 # --- Final Decision ---
-print("\n" + "="*30)
-print("FINAL MVP SELECTION")
-print("="*30)
+print("\n" + "="*50)
+print("FINAL DECISION: MVP SELECTION")
+print("="*50)
 
 # Comparing models helps us choose the best tool for the job.
 # For an MVP, we balance accuracy with simplicity.
+
+
+
+
+
+
 
 if rf_acc > accuracy:
     print("🏆 Random Forest is selected for the MVP!")
