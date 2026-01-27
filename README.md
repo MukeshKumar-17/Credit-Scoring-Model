@@ -42,24 +42,7 @@ This project addresses these challenges by implementing a standardized ML pipeli
 ---
 
 ## ML Pipeline
-
-```text
-User Input (Form Data)
-  ↓
-Data Preprocessing
-(Label Encoding & Standard Scaling)
-  ↓
-Model Selection
-(Logistic Regression / Random Forest / XGBoost)
-  ↓
-Inference Engine
-(Probability Prediction)
-  ↓
-Risk Classification Logic
-(>60% Good | 40-60% Medium | <40% Bad)
-  ↓
-History Logging & UI Display
-```
+<img src="screenshots/flowchart.png" width="450" />
 
 ---
 
