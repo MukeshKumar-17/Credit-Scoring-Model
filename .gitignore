@@ -5,15 +5,14 @@ __pycache__/
 .Python
 env/
 venv/
+.venv/
 .env
-*.txt
 
 # Data files (keep structure, ignore large files)
 *.csv
 *.xlsx
 *.pkl
 *.joblib
-*.txt
 
 # IDE
 .vscode/
