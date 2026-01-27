@@ -6,6 +6,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from datetime import datetime
+import os
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -25,7 +27,7 @@ st.set_page_config(
 st.markdown("""
 <style>
     .main-header {
-        font-size: 6rem;
+        font-size: 3rem !important;
         font-weight: bold;
         color: #28A745;
         text-align: center;
@@ -75,6 +77,14 @@ st.markdown("""
     .prediction-bad p {
         color: #721C24 !important;
         margin: 5px 0;
+    }
+    .stButton > button[kind="primary"] {
+        background-color: #007BFF !important;
+        border-color: #007BFF !important;
+    }
+    .stButton > button[kind="primary"]:hover {
+        background-color: #0056b3 !important;
+        border-color: #0056b3 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -175,6 +185,40 @@ def load_and_train_model():
 log_model, rf_model, xgb_model, scaler, log_accuracy, rf_accuracy, xgb_accuracy, feature_names = load_and_train_model()
 
 # ===============================
+# HISTORY FUNCTIONS (Simple CSV)
+# ===============================
+
+HISTORY_FILE = "prediction_history.csv"
+
+def save_to_history(name, model, credit_amount, age, result, confidence):
+    """Save a prediction to CSV file"""
+    # Create new row
+    new_row = {
+        "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Customer": name if name else "Unknown",
+        "Model": model,
+        "Credit Amount": credit_amount,
+        "Age": age,
+        "Result": result,
+        "Confidence": f"{confidence:.1f}%"
+    }
+    
+    # Append to CSV (create if not exists)
+    if os.path.exists(HISTORY_FILE):
+        df = pd.read_csv(HISTORY_FILE)
+        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        df = pd.DataFrame([new_row])
+    
+    df.to_csv(HISTORY_FILE, index=False)
+
+def load_history():
+    """Load history from CSV file"""
+    if os.path.exists(HISTORY_FILE):
+        return pd.read_csv(HISTORY_FILE)
+    return pd.DataFrame()
+
+# ===============================
 # STREAMLIT UI
 # ===============================
 
@@ -198,11 +242,41 @@ st.sidebar.metric("Random Forest", f"{rf_accuracy:.1%}")
 st.sidebar.metric("XGBoost", f"{xgb_accuracy:.1%}")
 
 # ===============================
+# HISTORY SECTION (Sidebar)
+# ===============================
+st.sidebar.markdown("---")
+st.sidebar.markdown("### Prediction History")
+
+history_df = load_history()
+
+if not history_df.empty:
+    st.sidebar.write(f"Total predictions: **{len(history_df)}**")
+    
+    # Show last 5 predictions
+    st.sidebar.dataframe(
+        history_df.tail(5)[["Customer", "Model", "Result", "Confidence"]],
+        hide_index=True,
+        use_container_width=True
+    )
+    
+    # Clear history button
+    if st.sidebar.button("Clear History", type="secondary"):
+        if os.path.exists(HISTORY_FILE):
+            os.remove(HISTORY_FILE)
+            st.sidebar.success("History cleared!")
+            st.rerun()
+else:
+    st.sidebar.info("No predictions yet. Make a prediction to see history.")
+
+# ===============================
 # INPUT FORM
 # ===============================
 
 st.markdown("---")
 st.markdown("### Enter Customer Information")
+
+# Customer Name Input
+customer_name = st.text_input("Customer Name", placeholder="Enter customer name...")
 
 # Create input columns
 col1, col2, col3 = st.columns(3)
@@ -410,7 +484,10 @@ if predict_btn:
         probability = xgb_model.predict_proba(input_df)[0]
     
     st.markdown("---")
-    st.markdown("### Prediction Result")
+    if customer_name:
+        st.markdown(f"### Prediction Result for **{customer_name}**")
+    else:
+        st.markdown("### Prediction Result")
     
     result_col1, result_col2 = st.columns(2)
     
@@ -420,6 +497,7 @@ if predict_btn:
     with result_col1:
         # Determine risk level based on probability
         if good_prob >= 60:
+            result_label = "Good Credit"
             st.markdown("""
             <div class="prediction-good">
                 <h2>GOOD CREDIT</h2>
@@ -428,6 +506,7 @@ if predict_btn:
             </div>
             """, unsafe_allow_html=True)
         elif good_prob >= 40:
+            result_label = "Medium Credit"
             st.markdown("""
             <div class="prediction-medium">
                 <h2>MEDIUM CREDIT</h2>
@@ -436,6 +515,7 @@ if predict_btn:
             </div>
             """, unsafe_allow_html=True)
         else:
+            result_label = "Bad Credit"
             st.markdown("""
             <div class="prediction-bad">
                 <h2>BAD CREDIT</h2>
@@ -452,6 +532,17 @@ if predict_btn:
         
         st.progress(int(bad_prob))
         st.write(f"Bad Credit Probability: **{bad_prob:.1f}%**")
+    
+    # Save prediction to history
+    save_to_history(
+        name=customer_name,
+        model=model_choice,
+        credit_amount=feature_5,
+        age=feature_13,
+        result=result_label,
+        confidence=good_prob
+    )
+    st.success("Prediction saved to history!")
 
 # Footer
 st.markdown("---")
