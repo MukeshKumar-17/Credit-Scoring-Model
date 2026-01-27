@@ -1,24 +1,36 @@
-# Credit Scoring ML Project
+# Credit Scoring Model
 
-Predicting credit risk using German Credit / Lending Club data.
+A machine learning project to predict credit risk using Logistic Regression and Random Forest.
 
-## Setup
+## Features
 
-```bash
-pip install -r requirements.txt
-```
+- Binary classification (Good/Bad credit)
+- Model comparison (Logistic Regression vs Random Forest)
+- Feature importance analysis
+- Business risk cost analysis
 
 ## Usage
 
-1. Put your CSV dataset in `data/raw/`
-2. Update the filename in `config/config.py` if needed
-3. Run: `python main.py`
+```bash
+python main.py
+```
 
 ## Project Structure
 
-- `data/raw/` - original datasets
-- `data/processed/` - cleaned data
-- `src/` - python modules
-- `models/` - saved models
-- `reports/` - analysis output
-- `notebooks/` - jupyter notebooks
+```
+├── main.py          # Main ML pipeline
+├── README.md        # Project documentation
+└── .gitignore       # Git ignore rules
+```
+
+## Models Used
+
+- **Logistic Regression** - Interpretable, preferred for explainability
+- **Random Forest** - Higher accuracy, handles complex patterns
+
+## Evaluation Metrics
+
+- Accuracy
+- Recall (Business priority - catching risky customers)
+- Confusion Matrix
+- Classification Report

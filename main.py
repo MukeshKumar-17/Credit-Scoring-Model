@@ -1,10 +1,13 @@
 
-# main.py - separate features and target
+# main.py - Credit Scoring Model
 
-from src.data_loader import load_data
+import pandas as pd
 
-# load dataset
-df = load_data("../DataC/german.data-numeric")
+# load dataset (German Credit - 24 features, no headers)
+df = pd.read_csv("Dataset/german.data-numeric", sep=r'\s+', header=None)
+
+# assign column names (24 features + 1 target)
+df.columns = [f'Feature_{i}' for i in range(1, 25)] + ['Target']
 
 # separate features (X) and target (y)
 X = df.drop('Target', axis=1)
@@ -180,10 +183,10 @@ print("="*50)
 
 
 if rf_acc > accuracy:
-    print("🏆 Random Forest is selected for the MVP!")
+    print("Random Forest is selected for the MVP!")
     print(f"Reason: It has higher accuracy ({rf_acc:.2%}) and handles complex data patterns.")
     print("Note: In real credit scoring, we might still prefer Logistic Regression for explainability.")
 else:
-    print("🏆 Logistic Regression is selected for the MVP!")
+    print("Logistic Regression is selected for the MVP!")
     print(f"Reason: It performs similarly ({accuracy:.2%}) and is much easier to explain.")
     print("Note: In finance, being able to explain 'WHY' a loan was rejected is critical.")
