@@ -5,6 +5,10 @@ The system enables financial institutions to evaluate customer creditworthiness 
 
 Built with **Python**, **Streamlit**, **Scikit-learn**, and **XGBoost**.
 
+## Try it out
+
+### [Live Demo](https://creditmk.streamlit.app/)
+
 ---
 
 ## Overview
